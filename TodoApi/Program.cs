@@ -3,7 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using TodoApi; 
 
 var builder = WebApplication.CreateBuilder(args);
-
+// 1. כאן מוסיפים את ההגדרה (לפני ה-Build)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 // 1. הוספת תמיכה ב-Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -23,13 +32,14 @@ builder.Services.AddCors(options =>
         });
 });
 var app = builder.Build();
+
 app.UseCors("AllowAll");
 // 2. הפעלת ממשק ה-Swagger
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 // 3. הגדרת הכתובות (Routes)
 // --- שלב 2: הגדרת הכתובות של ה-API (Routes) ---
