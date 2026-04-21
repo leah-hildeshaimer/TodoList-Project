@@ -18,9 +18,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // חיבור למסד הנתונים
+// חיבור למסד הנתונים - הגדרה מפורשת כדי למנוע קריסה ב-Render
 var connectionString = builder.Configuration.GetConnectionString("ToDoDB");
+
 builder.Services.AddDbContext<ToDoDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseMySql(connectionString, 
+        new MySqlServerVersion(new Version(8, 0, 36)), // הגדרת גרסה ידנית במקום AutoDetect
+        mysqlOptions => mysqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null)
+    ));
+// var connectionString = builder.Configuration.GetConnectionString("ToDoDB");
+// builder.Services.AddDbContext<ToDoDbContext>(options =>
+//     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
