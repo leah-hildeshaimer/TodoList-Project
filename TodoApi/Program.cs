@@ -46,8 +46,12 @@ var app = builder.Build();
 // יצירת בסיס הנתונים והטבלאות באופן אוטומטי אם הן לא קיימות
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<ToDoDbContext>();
-    dbContext.Database.EnsureCreated(); 
+    var db = scope.ServiceProvider.GetRequiredService<ToDoDbContext>();
+    // זה ינסה רק להתחבר, בלי "להתפרע" עם יצירת טבלאות אם החיבור לא מושלם
+    if (db.Database.CanConnect()) 
+    {
+        db.Database.EnsureCreated();
+    }
 }
 
 app.UseCors("AllowAll");
