@@ -43,6 +43,12 @@ builder.Services.AddCors(options =>
         });
 });
 var app = builder.Build();
+// יצירת בסיס הנתונים והטבלאות באופן אוטומטי אם הן לא קיימות
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ToDoDbContext>();
+    dbContext.Database.EnsureCreated(); 
+}
 
 app.UseCors("AllowAll");
 // 2. הפעלת ממשק ה-Swagger
