@@ -1,39 +1,36 @@
 import axios from 'axios';
 
-// 1. הגדרת כתובת השרת כברירת מחדל לכל הקריאות (Config Defaults)
-axios.defaults.baseURL = process.env.REACT_APP_API_URL || "http://localhost:5057";
-// הגדרת interceptor לתפיסת שגיאות
-axios.interceptors.response.use(
-    response => response,
-    error => {
-        console.error("API Error:", error.response ? error.response.data : error.message);
-        return Promise.reject(error);
-    }
-);
+const apiUrl = "https://todo-list-api-ua1v.onrender.com/";
+axios.defaults.baseURL = apiUrl;
 
 export default {
-  getTasks: async () => {
-    // עכשיו אפשר לכתוב רק את הנתיב, axios כבר יודע את ה-URL
-    const result = await axios.get("/items");    
+  // קבלת משימות לפי יוזר
+  getTasks: async (userId) => {
+    const result = await axios.get(`/items/${userId}`);    
     return result.data;
   },
 
-  addTask: async (name) => {
-    const result = await axios.post("/items", { name: name, isComplete: false });    
+  // הוספת משימה עם יוזר
+  addTask: async (name, userId) => {
+    const result = await axios.post(`/items`, { name, isComplete: false, userId });
     return result.data;
   },
 
-  // setCompleted: async (id, isComplete) => {
-  //   // אנחנו שולחים את ה-isComplete. 
-  //   // השרת ב-C# יקבל את זה ויעדכן את המשימה לפי ה-ID שבנתיב.
-  //   await axios.put(`/items/${id}`, { isComplete: isComplete });
-  // },
- // },
-setCompleted: async (id, isComplete) => {
-  // נסי לשלוח אובייקט פשוט עם שני השדות
-  await axios.put(`/items/${id}`, { id: id, isComplete: isComplete });
-},
+  setCompleted: async (id, isComplete) => {
+    await axios.put(`/items/${id}`, { isComplete });
+  },
+
   deleteTask: async (id) => {
     await axios.delete(`/items/${id}`);
+  },
+
+  // לוגין והרשמה
+  register: async (username, password) => {
+    return await axios.post(`/Auth/register`, { username, password });
+  },
+
+  login: async (username, password) => {
+    const result = await axios.post(`/Auth/login`, { username, password });
+    return result.data; // מחזיר { userId, username }
   }
 };

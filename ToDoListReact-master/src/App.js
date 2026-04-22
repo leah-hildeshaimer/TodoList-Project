@@ -1,52 +1,74 @@
 import React, { useEffect, useState } from 'react';
 import service from './service.js';
+import Login from './Login'; // וודאי שיצרת את הקובץ הזה ב-src
 import './App.css';
 
 function App() {
+  const [user, setUser] = useState(null); // שמירת המשתמש המחובר
   const [newTodo, setNewTodo] = useState("");
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  async function getTodos() {
+  // פונקציה לטעינת משימות לפי ה-userId של המשתמש המחובר
+  async function getTodos(userId) {
     setLoading(true);
     try {
-      const todos = await service.getTasks();
+      const todos = await service.getTasks(userId);
       setTodos(todos || []);
+    } catch (error) {
+      console.error("Error fetching tasks", error);
     } finally {
       setLoading(false);
     }
   }
 
+  // הוספת משימה חדשה עם ה-userId
   async function createTodo(e) {
     e.preventDefault();
-    if (!newTodo.trim()) return;
-    await service.addTask(newTodo);
+    if (!newTodo.trim() || !user) return;
+    
+    await service.addTask(newTodo, user.userId);
     setNewTodo("");
-    await getTodos();
+    await getTodos(user.userId);
   }
 
   async function updateCompleted(todo, isComplete) {
     await service.setCompleted(todo.id, isComplete);
-    await getTodos();
+    await getTodos(user.userId);
   }
 
   async function deleteTodo(id) {
     await service.deleteTask(id);
-    await getTodos();
+    await getTodos(user.userId);
   }
 
-  useEffect(() => {
-    getTodos();
-  }, []);
+  // התנתקות מהמערכת
+  function handleLogout() {
+    setUser(null);
+    setTodos([]);
+  }
 
+  // אם אין משתמש מחובר - מציגים את מסך הלוגין
+  if (!user) {
+    return <Login onLogin={(loggedInUser) => {
+      setUser(loggedInUser);
+      getTodos(loggedInUser.userId);
+    }} />;
+  }
+
+  // חישובים עבור העיצוב שלך
   const completedCount = todos.filter(t => t.isComplete).length;
   const progress = todos.length > 0 ? Math.round((completedCount / todos.length) * 100) : 0;
+
   return (
     <div className="app-container">
       <div className="todo-card">
         <header className="app-header">
-          <h1>My Focus</h1>
-          <p className="subtitle">Let's be amazing today</p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+             <h1>My Focus</h1>
+             <button onClick={handleLogout} className="logout-btn" style={{background: 'none', border: '1px solid #ddd', cursor: 'pointer', borderRadius: '4px', fontSize: '12px'}}>Logout</button>
+          </div>
+          <p className="subtitle">Welcome back, {user.username} ✨</p>
           
           <div className="stats-bar">
             <span>{todos.length} Tasks</span>
@@ -60,11 +82,14 @@ function App() {
               value={newTodo} 
               onChange={(e) => setNewTodo(e.target.value)} 
             />
-            <button type="submit" className="add-btn">Add</button>
+            <button type="submit" className="add-btn" disabled={loading}>
+              {loading ? "..." : "Add"}
+            </button>
           </form>
         </header>
 
         <ul className="modern-list">
+          {todos.length === 0 && !loading && <p style={{textAlign: 'center', opacity: 0.5}}>No tasks yet. Start being amazing!</p>}
           {todos.map(todo => (
             <li key={todo.id} className={`todo-item ${todo.isComplete ? 'is-done' : ''}`}>
               <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
