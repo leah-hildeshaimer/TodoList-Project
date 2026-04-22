@@ -1,144 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
 :root {
-  --primary: #4f46e5;
-  --bg: #f8fafc;
-  --text: #1e293b;
-  --card-bg: #ffffff;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --accent: #764ba2;
 }
 
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, sans-serif;
-  background-color: var(--bg);
-  color: var(--text);
+  font-family: 'Poppins', sans-serif;
+  background: var(--primary-gradient);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2d3436;
 }
 
 .app-container {
-  display: flex;
-  justify-content: center;
-  padding: 50px 20px;
-  min-height: 100vh;
+  width: 100%;
+  max-width: 450px;
+  padding: 20px;
 }
 
 .todo-card {
-  background: var(--card-bg);
-  width: 100%;
-  max-width: 500px;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-  overflow: hidden;
-  padding: 30px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 40px 30px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
 }
 
 .app-header h1 {
   margin: 0;
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--primary);
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
-  color: #64748b;
-  font-size: 14px;
-  margin-top: 5px;
+  text-align: center;
+  font-size: 13px;
+  color: #636e72;
+  margin-bottom: 25px;
 }
 
 .stats-bar {
   display: flex;
-  gap: 15px;
-  margin: 20px 0;
+  justify-content: space-around;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 10px;
+  border-radius: 12px;
+  margin-bottom: 25px;
   font-size: 12px;
   font-weight: 600;
-  text-transform: uppercase;
-  color: #94a3b8;
 }
 
 .input-group {
   display: flex;
-  gap: 10px;
-  margin-bottom: 30px;
+  background: white;
+  border-radius: 15px;
+  padding: 5px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  margin-bottom: 25px;
 }
 
 .modern-input {
   flex: 1;
+  border: none;
   padding: 12px 15px;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
   outline: none;
-  transition: border-color 0.2s;
-}
-
-.modern-input:focus {
-  border-color: var(--primary);
+  font-family: inherit;
+  font-size: 14px;
 }
 
 .add-btn {
-  background: var(--primary);
+  background: var(--primary-gradient);
   color: white;
   border: none;
   padding: 0 20px;
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.1s;
+  transition: opacity 0.2s;
 }
 
-.add-btn:active { transform: scale(0.95); }
+.add-btn:hover {
+  opacity: 0.9;
+}
 
 .modern-list {
   list-style: none;
   padding: 0;
+  max-height: 400px;
+  overflow-y: auto;
 }
+
+/* עיצוב פס גלילה */
+.modern-list::-webkit-scrollbar { width: 5px; }
+.modern-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
 
 .todo-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  background: #f1f5f9;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  transition: all 0.2s;
+  background: white;
+  border-radius: 15px;
+  margin-bottom: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .todo-item:hover {
-  background: #e2e8f0;
-}
-
-.todo-content {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 .todo-text {
-  font-weight: 500;
+  font-size: 15px;
+  transition: all 0.3s;
+}
+
+.is-done {
+  opacity: 0.6;
 }
 
 .is-done .todo-text {
   text-decoration: line-through;
-  color: #94a3b8;
 }
 
 .modern-checkbox {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
+  accent-color: #764ba2;
   cursor: pointer;
-  accent-color: var(--primary);
 }
 
 .delete-icon {
-  background: none;
+  background: #ffeaa7;
+  color: #d63031;
   border: none;
-  color: #cbd5e1;
-  font-size: 18px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: color 0.2s;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
 }
 
-.delete-icon:hover { color: #ef4444; }
-
-.empty-state {
-  text-align: center;
-  color: #94a3b8;
-  padding: 40px 0;
+.delete-icon:hover {
+  background: #fab1a0;
 }
