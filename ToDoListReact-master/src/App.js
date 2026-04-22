@@ -40,56 +40,48 @@ function App() {
   }, []);
 
   const completedCount = todos.filter(t => t.isComplete).length;
-
+  const progress = todos.length > 0 ? Math.round((completedCount / todos.length) * 100) : 0;
   return (
     <div className="app-container">
       <div className="todo-card">
         <header className="app-header">
-          <h1>Productive Day</h1>
-          <p className="subtitle">Manage your tasks professionally</p>
-
+          <h1>My Focus</h1>
+          <p className="subtitle">Let's be amazing today</p>
+          
           <div className="stats-bar">
             <span>{todos.length} Tasks</span>
-            <span>{completedCount} Completed</span>
+            <span>{progress}% Done</span>
           </div>
 
           <form onSubmit={createTodo} className="input-group">
-            <input
-              type="text"
-              className="modern-input"
-              placeholder="What needs to be done?"
-              value={newTodo}
-              onChange={(e) => setNewTodo(e.target.value)}
+            <input 
+              className="modern-input" 
+              placeholder="Add a new task..." 
+              value={newTodo} 
+              onChange={(e) => setNewTodo(e.target.value)} 
             />
             <button type="submit" className="add-btn">Add</button>
           </form>
         </header>
 
-        <section className="list-section">
-          {loading && <div className="loader">Updating...</div>}
-
-          <ul className="modern-list">
-            {todos.length === 0 && !loading && (
-              <div className="empty-state">No tasks yet. Start by adding one!</div>
-            )}
-            {todos.map(todo => (
-              <li key={todo.id} className={`todo-item ${todo.isComplete ? 'is-done' : ''}`}>
-                <div className="todo-content">
-                  <input
-                    type="checkbox"
-                    className="modern-checkbox"
-                    checked={todo.isComplete}
-                    onChange={(e) => updateCompleted(todo, e.target.checked)}
-                  />
-                  <span className="todo-text">{todo.name}</span>
-                </div>
-                <button className="delete-icon" onClick={() => deleteTodo(todo.id)}>
-                  <span style={{ marginTop: '-2px' }}>×</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <ul className="modern-list">
+          {todos.map(todo => (
+            <li key={todo.id} className={`todo-item ${todo.isComplete ? 'is-done' : ''}`}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
+                <input 
+                  type="checkbox" 
+                  className="modern-checkbox"
+                  checked={todo.isComplete} 
+                  onChange={(e) => updateCompleted(todo, e.target.checked)} 
+                />
+                <span className="todo-text">{todo.name}</span>
+              </div>
+              <button className="delete-icon" onClick={() => deleteTodo(todo.id)}>
+                ✕
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
