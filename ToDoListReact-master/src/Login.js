@@ -11,35 +11,42 @@ function Login({ onLogin }) {
     try {
       if (isRegister) {
         await service.register(username, password);
-        alert("נרשמת בהצלחה! עכשיו תתחבר");
+        alert("נרשמת בהצלחה! מוזמן להתחבר");
         setIsRegister(false);
       } else {
         const user = await service.login(username, password);
-        onLogin(user); // שומר את המשתמש באפליקציה
+        onLogin(user);
       }
     } catch (error) {
-      alert("משהו לא עבד... בדוק שם משתמש וסיסמה");
+      alert("שגיאה: וודא ששם המשתמש והסיסמה נכונים");
     }
   };
 
   return (
-    <div style={{ padding: "20px", textAlign: "center" }}>
-      <h2>{isRegister ? "הרשמה" : "התחברות"}</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="login-container">
+      <h2 style={{color: '#2e7d32'}}>{isRegister ? "ליצור חשבון חדש" : "כניסה למערכת"}</h2>
+      <p style={{color: '#666'}}>ניהול משימות חכם ופשוט</p>
+      
+      <form onSubmit={handleSubmit} className="login-form">
         <input 
+          className="login-input"
           type="text" placeholder="שם משתמש" 
           value={username} onChange={e => setUsername(e.target.value)} 
           required 
-        /><br/><br/>
+        />
         <input 
+          className="login-input"
           type="password" placeholder="סיסמה" 
           value={password} onChange={e => setPassword(e.target.value)} 
           required 
-        /><br/><br/>
-        <button type="submit">{isRegister ? "הירשם" : "כנס למערכת"}</button>
+        />
+        <button type="submit" className="add-btn" style={{width: '100%', margin: '10px 0'}}>
+          {isRegister ? "הירשם עכשיו" : "התחבר"}
+        </button>
       </form>
-      <p onClick={() => setIsRegister(!isRegister)} style={{ cursor: "pointer", color: "blue" }}>
-        {isRegister ? "כבר יש לי חשבון" : "אני רוצה להירשם"}
+      
+      <p className="login-link" onClick={() => setIsRegister(!isRegister)}>
+        {isRegister ? "כבר יש לך חשבון? להתחברות" : "אין לך חשבון? להרשמה מהירה"}
       </p>
     </div>
   );

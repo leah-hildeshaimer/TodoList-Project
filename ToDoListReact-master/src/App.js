@@ -64,11 +64,14 @@ function App() {
     <div className="app-container">
       <div className="todo-card">
         <header className="app-header">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-             <h1>My Focus</h1>
-             <button onClick={handleLogout} className="logout-btn" style={{background: 'none', border: '1px solid #ddd', cursor: 'pointer', borderRadius: '4px', fontSize: '12px'}}>Logout</button>
-          </div>
-          <p className="subtitle">Welcome back, {user.username} ✨</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+     <h1>My Focus</h1>
+     <button onClick={handleLogout} className="logout-btn" 
+             style={{background: '#f5f5f5', border: 'none', padding: '8px 12px', cursor: 'pointer', borderRadius: '8px', fontSize: '12px', color: '#666', marginTop: '15px'}}>
+       Logout
+     </button>
+  </div>
+  <p className="subtitle">Welcome back, {user.username} ✨</p>
           
           <div className="stats-bar">
             <span>{todos.length} Tasks</span>
