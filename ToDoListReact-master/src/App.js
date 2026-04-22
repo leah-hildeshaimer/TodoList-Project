@@ -60,59 +60,45 @@ function App() {
   const completedCount = todos.filter(t => t.isComplete).length;
   const progress = todos.length > 0 ? Math.round((completedCount / todos.length) * 100) : 0;
 
-  return (
-    <div className="app-container">
-      <div className="todo-card">
-        <header className="app-header">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <h1>My Focus</h1>
-            <button onClick={handleLogout} className="logout-btn"
-              style={{ background: '#f5f5f5', border: 'none', padding: '8px 12px', cursor: 'pointer', borderRadius: '8px', fontSize: '12px', color: '#666', marginTop: '15px' }}>
-              Logout
-            </button>
-          </div>
-          <p className="subtitle">Welcome back, {user.username} ✨</p>
+return (
+  <div className="app-container">
+    <div className="todo-card">
+      <header className="app-header">
+        <div style={{ textAlign: 'right' }}>
+          <button onClick={handleLogout} className="logout-btn" style={{background: '#f1f5f9', border: 'none', padding: '5px 10px', borderRadius: '8px', fontSize: '11px', cursor: 'pointer'}}>Logout</button>
+        </div>
+        <h1>Mv Focus</h1>
+        <p className="subtitle" style={{textAlign:'center', color:'#64748b'}}>Welcome back, {user.username} ✨</p>
+        
+        <form onSubmit={createTodo} className="input-group">
+          <input 
+            className="modern-input" 
+            placeholder="Add a new task..." 
+            value={newTodo} 
+            onChange={(e) => setNewTodo(e.target.value)} 
+          />
+          <button type="submit" className="add-btn">Add</button>
+        </form>
+      </header>
 
-          <div className="stats-bar">
-            <span>{todos.length} Tasks</span>
-            <span>{progress}% Done</span>
-          </div>
-
-          <form onSubmit={createTodo} className="input-group">
-            <input
-              className="modern-input"
-              placeholder="Add a new task..."
-              value={newTodo}
-              onChange={(e) => setNewTodo(e.target.value)}
-            />
-            <button type="submit" className="add-btn" disabled={loading}>
-              {loading ? "..." : "Add"}
-            </button>
-          </form>
-        </header>
-
-        <ul className="modern-list">
-          {todos.length === 0 && !loading && <p style={{ textAlign: 'center', opacity: 0.5 }}>No tasks yet. Start being amazing!</p>}
-          {todos.map(todo => (
-            <li key={todo.id} className={`todo-item ${todo.isComplete ? 'is-done' : ''}`}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <input
-                  type="checkbox"
-                  className="modern-checkbox"
-                  checked={todo.isComplete}
-                  onChange={(e) => updateCompleted(todo, e.target.checked)}
-                />
-                <span className="todo-text">{todo.name}</span>
-              </div>
-              <button className="delete-icon" onClick={() => deleteTodo(todo.id)}>
-                ✕
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ul className="modern-list" style={{listStyle:'none', padding:0, marginTop: '20px'}}>
+        {todos.map(todo => (
+          <li key={todo.id} className="todo-item">
+            <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
+              <input 
+                type="checkbox" 
+                checked={todo.isComplete} 
+                onChange={(e) => updateCompleted(todo, e.target.checked)} 
+              />
+              <span style={{textDecoration: todo.isComplete ? 'line-through' : 'none'}}>{todo.name}</span>
+            </div>
+            <button className="delete-icon" onClick={() => deleteTodo(todo.id)}>✕</button>
+          </li>
+        ))}
+      </ul>
     </div>
-  );
+  </div>
+);
 }
 
 export default App;
