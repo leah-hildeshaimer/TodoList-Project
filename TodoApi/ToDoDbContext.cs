@@ -14,7 +14,7 @@ public partial class ToDoDbContext : DbContext
         : base(options)
     {
     }
-
+    public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Item> Items { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -33,11 +33,16 @@ public partial class ToDoDbContext : DbContext
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             // חשוב: שם הטבלה בדיוק כפי שמופיע ב-Workbench
-            entity.ToTable("Items"); 
+            entity.ToTable("Items");
 
             entity.Property(e => e.Name).HasMaxLength(255);
         });
-
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.ToTable("Users"); // חייב להיות בדיוק כמו ב-Workbench
+            entity.Property(e => e.Username).HasMaxLength(50);
+        });
         OnModelCreatingPartial(modelBuilder);
     }
 
