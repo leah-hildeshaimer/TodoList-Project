@@ -26,7 +26,7 @@ function App() {
   async function createTodo(e) {
     e.preventDefault();
     if (!newTodo.trim() || !user) return;
-    
+
     await service.addTask(newTodo, user.userId);
     setNewTodo("");
     await getTodos(user.userId);
@@ -64,26 +64,26 @@ function App() {
     <div className="app-container">
       <div className="todo-card">
         <header className="app-header">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-     <h1>My Focus</h1>
-     <button onClick={handleLogout} className="logout-btn" 
-             style={{background: '#f5f5f5', border: 'none', padding: '8px 12px', cursor: 'pointer', borderRadius: '8px', fontSize: '12px', color: '#666', marginTop: '15px'}}>
-       Logout
-     </button>
-  </div>
-  <p className="subtitle">Welcome back, {user.username} ✨</p>
-          
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <h1>My Focus</h1>
+            <button onClick={handleLogout} className="logout-btn"
+              style={{ background: '#f5f5f5', border: 'none', padding: '8px 12px', cursor: 'pointer', borderRadius: '8px', fontSize: '12px', color: '#666', marginTop: '15px' }}>
+              Logout
+            </button>
+          </div>
+          <p className="subtitle">Welcome back, {user.username} ✨</p>
+
           <div className="stats-bar">
             <span>{todos.length} Tasks</span>
             <span>{progress}% Done</span>
           </div>
 
           <form onSubmit={createTodo} className="input-group">
-            <input 
-              className="modern-input" 
-              placeholder="Add a new task..." 
-              value={newTodo} 
-              onChange={(e) => setNewTodo(e.target.value)} 
+            <input
+              className="modern-input"
+              placeholder="Add a new task..."
+              value={newTodo}
+              onChange={(e) => setNewTodo(e.target.value)}
             />
             <button type="submit" className="add-btn" disabled={loading}>
               {loading ? "..." : "Add"}
@@ -92,15 +92,15 @@ function App() {
         </header>
 
         <ul className="modern-list">
-          {todos.length === 0 && !loading && <p style={{textAlign: 'center', opacity: 0.5}}>No tasks yet. Start being amazing!</p>}
+          {todos.length === 0 && !loading && <p style={{ textAlign: 'center', opacity: 0.5 }}>No tasks yet. Start being amazing!</p>}
           {todos.map(todo => (
             <li key={todo.id} className={`todo-item ${todo.isComplete ? 'is-done' : ''}`}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
-                <input 
-                  type="checkbox" 
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <input
+                  type="checkbox"
                   className="modern-checkbox"
-                  checked={todo.isComplete} 
-                  onChange={(e) => updateCompleted(todo, e.target.checked)} 
+                  checked={todo.isComplete}
+                  onChange={(e) => updateCompleted(todo, e.target.checked)}
                 />
                 <span className="todo-text">{todo.name}</span>
               </div>
